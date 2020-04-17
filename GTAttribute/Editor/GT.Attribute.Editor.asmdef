@@ -1,0 +1,15 @@
+{
+    "name": "GT.Attribute.Editor",
+    "references": [
+        "GUID:e296b21dbd7fb3b4ea3d647065f1d327"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
