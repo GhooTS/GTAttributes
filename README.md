@@ -1,2 +1,2 @@
 # GTAttributes
-Custom property attributes for unity [DOCUMENTAION COMING SOON]
+Custom property attributes for unity [DOCUMENTATION COMING SOON]
