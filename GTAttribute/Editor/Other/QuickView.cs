@@ -23,7 +23,6 @@ namespace GTAttribute.Editor
                 return;
             }
 
-
             var window = EditorWindow.GetWindow<QucikViewWindow>();
             window.SetReferenceObject(objectToInspect);
             window.Show();

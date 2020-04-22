@@ -11,7 +11,7 @@ namespace GTAttribute.Editor
 
 
 
-        [MenuItem("Window/Qucik view", priority = 2000)]
+        [MenuItem("Window/Qucik view", priority = 2950)]
         public static void Init()
         {
             GetWindow<QucikViewWindow>();
@@ -30,13 +30,11 @@ namespace GTAttribute.Editor
             titleContent = new GUIContent("Qucik View");
             autoRepaintOnSceneChange = true;
             DestroyEditor();
-            Debug.Log("enable");
         }
         
         private void OnDisable()
         {
             DestroyEditor();
-            Debug.Log("disable");
         }
 
         public void SetReferenceObject(Object refObject)

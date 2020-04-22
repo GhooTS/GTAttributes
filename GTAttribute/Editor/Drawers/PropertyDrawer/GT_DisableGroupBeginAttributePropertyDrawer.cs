@@ -9,83 +9,93 @@ namespace GTAttribute.Editor
     public class GT_DisableGroupBeginAttributePropertyDrawer : PropertyDrawer
     {
 
+        private Color disableRefPropertyColor = new Color(.85f, .35f, .35f);
+
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             GT_DisableGroupBeginAttribute disableAttr = attribute as GT_DisableGroupBeginAttribute;
             
+
             if (disableAttr.FieldName != null)
             {
                 var field = property.serializedObject.FindProperty(disableAttr.FieldName);
+                bool parentEnable = true;
+
+
+                //Check if field name is correct, if not display help box
+                if(field == null)
+                {
+                    EditorGUI.HelpBox(position, $"Field with name '{disableAttr.FieldName}' doesn't exist",MessageType.Error);
+                    return;
+                }
+
+                if (disableAttr.ParentFieldName != null)
+                {
+                    var parentField = property.serializedObject.FindProperty(disableAttr.ParentFieldName);
+
+                    //Check if parent field name is correct, if not display help box
+                    if (parentField == null)
+                    {
+                        EditorGUI.HelpBox(position, $"Parent field with name '{disableAttr.ParentFieldName}' doesn't exist", MessageType.Error);
+                        return;
+                    }
+
+                    parentEnable = IsPropertySetToEnable(parentField, disableAttr);
+                }
+
+                bool enable = IsPropertySetToEnable(field, disableAttr);
 
                 switch (field.propertyType)
                 {
                     case SerializedPropertyType.Boolean:
-                        DrawBooleanControl(position, property, label, disableAttr, field);
+                        EditorGUI.PropertyField(position, property);
                         break;
                     case SerializedPropertyType.ObjectReference:
-                        DrawObjectReferenceControl(position, property, label, disableAttr, field);
+                        DrawObjectReferenceControl(position, property, label,enable);
                         break;
                     default:
-                        EditorGUI.HelpBox(position, $"type of {field.propertyType} is not supported",MessageType.Error);
+                        EditorGUI.HelpBox(position, $"Type of '{field.propertyType}' isn't supported",MessageType.Error);
                         break;
                 }
-                if (disableAttr.ParentFieldName != null)
-                {
-                    CheckParentValue(property, disableAttr);
-                }
+                
+                GUI.enabled = parentEnable ? enable : false;
             }
             else
             {
                 GUI.enabled = false;
                 EditorGUI.PropertyField(position, property, label, true);
             }
+
             EditorGUI.BeginDisabledGroup(false);
         }
 
-        private void CheckParentValue(SerializedProperty property,GT_DisableGroupBeginAttribute disableAttr)
+        private bool IsPropertySetToEnable(SerializedProperty field, GT_DisableGroupBeginAttribute disableAttr)
         {
-            var field = property.serializedObject.FindProperty(disableAttr.ParentFieldName);
-            bool enable = true;
-
-
             switch (field.propertyType)
             {
                 case SerializedPropertyType.Boolean:
-                    enable = (field.boolValue != disableAttr.ParentRevers);
-                    break;
+                    return field.boolValue != disableAttr.Invert;
                 case SerializedPropertyType.ObjectReference:
-                    enable = (field.objectReferenceValue != null) != disableAttr.ParentRevers;
-                    break;
+                    return (field.objectReferenceValue == null) == disableAttr.Invert;
                 default:
-                    break;
+                    return true;
             }
-
-            GUI.enabled = enable ? GUI.enabled : false;
         }
 
-        private void DrawBooleanControl(Rect position, SerializedProperty property, GUIContent label, GT_DisableGroupBeginAttribute disableAttr, SerializedProperty field)
-        {
-            EditorGUI.PropertyField(position, property, label, true);
-            bool enable = field.boolValue != disableAttr.Revers;
-            GUI.enabled = enable;
-        }
 
-        private void DrawObjectReferenceControl(Rect position, SerializedProperty property, GUIContent label, GT_DisableGroupBeginAttribute disableAttr, SerializedProperty field)
+        private void DrawObjectReferenceControl(Rect position, SerializedProperty property, GUIContent label,bool enable)
         {
-            bool enable = (field.objectReferenceValue == null) == disableAttr.Revers;
-            Color setColor = GUI.backgroundColor;
+            Color currentBGColor = GUI.backgroundColor;
             if (enable == false)
             {
-                GUI.backgroundColor = Color.red;
+                GUI.backgroundColor = disableRefPropertyColor;
             }
             EditorGUI.PropertyField(position, property, label, true);
             if (enable == false)
             {
-                GUI.backgroundColor = setColor;
+                GUI.backgroundColor = currentBGColor;
             }
-
-            GUI.enabled = enable;
         }
     }
 }

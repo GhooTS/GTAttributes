@@ -18,7 +18,7 @@ namespace GTAttribute.Editor
             
             if(property.propertyType != SerializedPropertyType.String)
             {
-                EditorGUI.HelpBox(position, "Predefine values work online for string field", MessageType.Warning);
+                EditorGUI.HelpBox(position, "Predefine values work online for string field", MessageType.Error);
                 return;
             }
 

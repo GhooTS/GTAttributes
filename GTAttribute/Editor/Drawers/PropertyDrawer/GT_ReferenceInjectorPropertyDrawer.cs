@@ -9,7 +9,7 @@ namespace GTAttribute.Editor
     [CustomPropertyDrawer(typeof(GT_ReferenceInjectorAttribute))]
     public class GT_ReferenceInjectorPropertyDrawer : PropertyDrawer
     {
-        private Type[] aviableTypes;
+        private Type[] availableTypes;
         private int selected = -1;
         private string[] typeNames;
         private int[] optionsValue;
@@ -34,7 +34,8 @@ namespace GTAttribute.Editor
             //Draw type selection popup
             Rect popupRect = RectUtility.SliceHoriozntal(optionsRect, position.width - 25, out Rect menuPosition);
             selected = EditorGUI.IntPopup(popupRect, selected, typeNames, optionsValue);
-            if(GUI.Button(RectUtility.SliceHoriozntal(menuPosition,5,false), "...", EditorStyles.miniButtonRight))
+ 
+            if(GUI.Button(RectUtility.SliceHoriozntal(menuPosition,5,false), "...", EditorStyles.miniButtonRight)) //TODO: Add icon
             {
                 var menu = new GenericMenu();
                 menu.AddItem(new GUIContent("Change"), false, OnInjectSelectedTypeSelected, property);
@@ -56,11 +57,11 @@ namespace GTAttribute.Editor
             var target = property.serializedObject.targetObject;
             var field = GetField(target.GetType(), property.name);
             var currentFieldValue = field.GetValue(target);
-            if (currentFieldValue == null || field.GetValue(target).GetType() != aviableTypes[selected])
-            {
 
-                //Get field and sets it value to chosen type
-                field.SetValue(target, Activator.CreateInstance(aviableTypes[selected]));
+            if (currentFieldValue == null || field.GetValue(target).GetType() != availableTypes[selected])
+            {
+                //Get field and set it's value to chosen type
+                field.SetValue(target, Activator.CreateInstance(availableTypes[selected]));
             }
         }
 
@@ -72,29 +73,30 @@ namespace GTAttribute.Editor
         private void RefreshTypeList(SerializedProperty property)
         {
             var target = property.serializedObject.targetObject;
-            //Get field Type
+            //Get field type
             var fieldType = GetField(target.GetType(), property.name).FieldType;
-            //Get All Associate type with field type
-            aviableTypes = GetAssociateClassTypes(fieldType);
+            //Get all associate type with field type
+            availableTypes = GetAssociateClassTypes(fieldType);
             //Set size of options value to number of types
-            optionsValue = new int[aviableTypes.Length];
+            optionsValue = new int[availableTypes.Length];
             //Set size of type names to number of types
-            typeNames = new string[aviableTypes.Length];
+            typeNames = new string[availableTypes.Length];
 
             //Set number and text value for popup
-            for (int i = 0; i < aviableTypes.Length; i++)
+            for (int i = 0; i < availableTypes.Length; i++)
             {
                 optionsValue[i] = i;
-                typeNames[i] = aviableTypes[i].ToString();
+                typeNames[i] = availableTypes[i].ToString();
             }
-            selected = aviableTypes.Length != 0 ? Mathf.Clamp(selected, 0, aviableTypes.Length - 1) : -1;
+
+            selected = availableTypes.Length != 0 ? Mathf.Clamp(selected, 0, availableTypes.Length - 1) : -1;
         }
 
         private System.Reflection.FieldInfo GetField(Type type, string fieldName)
         {
             return type.GetField(fieldName, System.Reflection.BindingFlags.NonPublic
-                                        | System.Reflection.BindingFlags.Instance
-                                        | System.Reflection.BindingFlags.Public);
+                                          | System.Reflection.BindingFlags.Instance
+                                          | System.Reflection.BindingFlags.Public);
         }
 
         private Type[] GetAssociateClassTypes(Type type)

@@ -9,6 +9,9 @@ namespace GTAttribute.Editor
     [CustomPropertyDrawer(typeof(GT_MinMaxRangeAttribute))]
     public class GT_MinMaxRangePropertyDrawer : PropertyDrawer
     {
+
+        private string maxSliderControlName;
+
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             float height = EditorGUI.GetPropertyHeight(property) + EditorGUIUtility.singleLineHeight;
@@ -30,10 +33,15 @@ namespace GTAttribute.Editor
             {
                 
                 SerializedProperty maxSliderProp = property;
+                if (string.IsNullOrEmpty(maxSliderControlName))
+                {
+                    maxSliderControlName = "Slider_" + maxSliderProp.name;
+                }
+
 
                 if (minSliderProp.propertyType != maxSliderProp.propertyType)
                 {
-                    EditorGUI.HelpBox(position, "Properties type don't much", MessageType.Warning);
+                    EditorGUI.HelpBox(position, "Properties type don't match", MessageType.Warning);
                     return;
                 }
 
@@ -49,12 +57,12 @@ namespace GTAttribute.Editor
                 }
 
                 EditorGUI.BeginChangeCheck();
-                string maxSliderControlName = "Slider_" + maxSliderProp.name;
+                
                 GUI.SetNextControlName(maxSliderControlName);
                 DrawSlider(maxSliderRect, maxSliderProp, "Max", minMaxRangeAttr.Min, minMaxRangeAttr.Max);
 
                 if ((EditorGUI.EndChangeCheck() && EditorGUIUtility.editingTextField == false) 
-                    || GUI.GetNameOfFocusedControl() != maxSliderControlName)
+                                                || GUI.GetNameOfFocusedControl() != maxSliderControlName)
                 {
                     ChangeValue(minSliderProp, maxSliderProp);
                 }

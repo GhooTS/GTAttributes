@@ -21,7 +21,7 @@ namespace GTAttribute.Editor
         {
             int propertiesCount = (attribute as GT_MultiPropertiesAttribute).PropertiesCount;
             position = RectUtility.SliceVertical(position, height - EditorGUIUtility.standardVerticalSpacing);
-            Rect[][] spliteRects = RectUtility.Splite(position,propertiesCount, 2,5,0);
+            Rect[][] spliteRects = RectUtility.Split(position,propertiesCount, 2,5,0);
 
             for (int i = 0; i < propertiesCount; i++)
             {

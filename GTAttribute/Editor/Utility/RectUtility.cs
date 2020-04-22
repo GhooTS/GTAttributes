@@ -28,20 +28,20 @@ namespace GTUtility
             return Chop(rect, horizontal, horizontal, vertical, vertical);
         }
 
-        public static Rect[][] Splite(Rect rect, int horizontalSplite, int verticaleSplite, float horizontalSpecing, float verticalSpacing)
+        public static Rect[][] Split(Rect rect, int horizontalSplite, int verticaleSplite, float horizontalSpecing, float verticalSpacing)
         {
             Rect[][] output = new Rect[verticaleSplite][];
-            Rect[] tmp = SpliteVertical(rect,verticaleSplite, verticalSpacing);
+            Rect[] tmp = SplitVertical(rect,verticaleSplite, verticalSpacing);
 
             for (int i = 0; i < verticaleSplite; i++)
             {
-                output[i] = SpliteHorizontal(tmp[i], horizontalSplite, horizontalSpecing);
+                output[i] = SplitHorizontal(tmp[i], horizontalSplite, horizontalSpecing);
             }
 
             return output;
         }
 
-        public static Rect[] SpliteHorizontal(Rect rect, int splite, float spacing)
+        public static Rect[] SplitHorizontal(Rect rect, int splite, float spacing)
         {
             Rect[] output = new Rect[splite];
 
@@ -58,7 +58,7 @@ namespace GTUtility
             return output;
         }
 
-        public static Rect[] SpliteHorizontal(Rect rect, int splite, float spacing,params float[] sizes)
+        public static Rect[] SplitHorizontal(Rect rect, int splite, float spacing,params float[] sizes)
         {
             Rect[] output = new Rect[splite];
 
@@ -81,7 +81,7 @@ namespace GTUtility
             return output;
         }
 
-        public static Rect[] SpliteVertical(Rect rect, int splite, float spacing)
+        public static Rect[] SplitVertical(Rect rect, int splite, float spacing)
         {
             Rect[] output = new Rect[splite];
 
