@@ -6,7 +6,7 @@ namespace GTAttribute.Editor
     [CustomPropertyDrawer(typeof(GT_PredefineValueAttribute))]
     public class GT_PredefineValuesPropertyDrawer : PropertyDrawer
     {
-        private int selected;
+        private int selected = -2;
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
@@ -23,6 +23,19 @@ namespace GTAttribute.Editor
             }
 
             GT_PredefineValueAttribute predefineValue = attribute as GT_PredefineValueAttribute;
+
+            if(selected == -2)
+            {
+                var values = predefineValue.Values;
+
+                for (int i = 0; i < values.Length; i++)
+                {
+                    if(values[i].GetHashCode() == property.stringValue.GetHashCode())
+                    {
+                        selected = i;
+                    }
+                }
+            }
 
 
             Rect popupRect = EditorGUI.PrefixLabel(position, label);

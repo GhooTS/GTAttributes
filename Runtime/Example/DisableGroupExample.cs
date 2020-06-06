@@ -15,10 +15,10 @@ namespace GTAttribute.Examples
         public bool disable;
         [GT_DisableGroupBegin(nameof(target), false, nameof(disable),true)]
         public GameObject target;
-        [GT_DisableGroupEnd(true)]
         public Vector3 offset;
+        [GT_DisableGroupEndDecorator(true)]
         public float value;
-        [GT_DisableGroupEndProp]
+        [GT_DisableGroupEnd]
         public ExampleClass someClass;
 
     }

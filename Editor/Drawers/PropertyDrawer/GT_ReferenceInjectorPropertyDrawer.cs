@@ -38,7 +38,7 @@ namespace GTAttribute.Editor
             if(GUI.Button(RectUtility.SliceHoriozntal(menuPosition,5,false), "...", EditorStyles.miniButtonRight)) //TODO: Add icon
             {
                 var menu = new GenericMenu();
-                menu.AddItem(new GUIContent("Change"), false, OnInjectSelectedTypeSelected, property);
+                menu.AddItem(new GUIContent("Inject"), false, OnInjectSelectedTypeSelected, property);
                 menu.AddItem(new GUIContent("Refresh"), false, OnRefreshTypeListSelected, property);
                 menu.DropDown(menuPosition);
             }
@@ -86,7 +86,7 @@ namespace GTAttribute.Editor
             for (int i = 0; i < availableTypes.Length; i++)
             {
                 optionsValue[i] = i;
-                typeNames[i] = availableTypes[i].ToString();
+                typeNames[i] = availableTypes[i].Name;
             }
 
             selected = availableTypes.Length != 0 ? Mathf.Clamp(selected, 0, availableTypes.Length - 1) : -1;
